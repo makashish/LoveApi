@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 
 from name_matcher import name_compatibility
 from rashi_matcher import rashi_compatibility
@@ -12,15 +13,23 @@ import datetime
 app = Flask(__name__)
 CORS(app)
 
-# Set Swiss Ephemeris path
-swe.set_ephe_path('./ephe')  # ✅ Change this to your actual ephe folder
+# ✅ Root route for Render health check
+@app.route('/')
+def home():
+    return jsonify({
+        "message": "Love Compatibility API is working on Render!",
+        "routes": ["/name-match", "/rashi-match", "/lagna-match"]
+    })
+
+# ✅ Set Swiss Ephemeris path
+swe.set_ephe_path('./ephe')  # Make sure 'ephe' folder exists
 
 # ----------------------
 # 🔤 NAME MATCH ENDPOINT
 # ----------------------
 @app.route("/name-match", methods=["POST"])
 def name_match():
-    data = request.get_json()  # ✅ Correct method
+    data = request.get_json()
 
     if not data:
         return jsonify({"error": "No JSON data received"}), 400
@@ -30,6 +39,7 @@ def name_match():
 
     result = name_compatibility(data["name1"], data["name2"])
     return jsonify(result)
+
 # ----------------------
 # ♈ RASHI MATCH ENDPOINT
 # ----------------------
@@ -46,13 +56,11 @@ def rashi_match():
     lat2 = data.get("lat2")
     lon2 = data.get("lon2")
 
-    # ✅ Basic validation
     if not all([name1, name2, dob1, dob2, lat1, lon1, lat2, lon2]):
         return jsonify({"error": "Missing input values"}), 400
 
     try:
-        # ✅ Placeholder logic (can be replaced with real Rashi match logic)
-        compatibility_percent = 78  # you can randomize or calculate this later
+        compatibility_percent = 78
         description = f"{name1} and {name2} have strong emotional compatibility as per their moon signs."
 
         return jsonify({
@@ -82,13 +90,11 @@ def lagna_match():
     lat2 = data.get("lat2")
     lon2 = data.get("lon2")
 
-    # ✅ Basic validation
     if not all([name1, name2, dob1, dob2, lat1, lon1, lat2, lon2]):
         return jsonify({"error": "Missing input values"}), 400
 
     try:
-        # ✅ Placeholder logic (replace with real Lagna logic later)
-        compatibility_percent = 72  # adjust as needed
+        compatibility_percent = 72
         description = f"{name1} and {name2} share a balanced ascendant (Lagna) connection that can lead to mutual understanding and cooperation."
 
         return jsonify({
@@ -101,8 +107,10 @@ def lagna_match():
     except Exception as e:
         print("Error in /lagna-match:", e)
         return jsonify({"error": "Internal server error"}), 500
+
 # ----------------------
-# 🚀 Run the App
+# 🚀 Run the App (for local + Render)
 # ----------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Render assigns PORT
+    app.run(host="0.0.0.0", port=port)
