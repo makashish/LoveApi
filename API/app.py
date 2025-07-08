@@ -22,7 +22,7 @@ def home():
     })
 
 # ✅ Set Swiss Ephemeris path
-swe.set_ephe_path('./ephe')  # Make sure 'ephe' folder exists
+swe.set_ephe_path('static/ephe')  # Make sure 'ephe' folder exists
 
 # ----------------------
 # 🔤 NAME MATCH ENDPOINT
