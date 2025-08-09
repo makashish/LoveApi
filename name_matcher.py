@@ -15,15 +15,15 @@ def name_compatibility(name1, name2):
     if compatibility_percent >= 90:
         report = "Strong bond likely by name vibrations and sound resonance."
     elif compatibility_percent >= 81:
-        report = "Good compatibility in name meanings and numerology."
+        report = "Create an ascendant harmony that bridges differences and strengthens partnership."
     elif compatibility_percent >= 71:
-        report = "Good compatibility in name meanings and numerology."
+        report = "Sustain a balanced ascendant understanding that leads to lasting cooperation."
     elif compatibility_percent >= 61:
-        report = "Good compatibility in name meanings and numerology."
+        report = "Foster a supportive ascendant alignment that deepens trust and unity."
     elif compatibility_percent >= 51:
-        report = "Good compatibility in name meanings and numerology."
+        report = "Maintain a stable ascendant connection that encourages empathy and teamwork."
     elif compatibility_percent >= 41:
-        report = "Good compatibility in name meanings and numerology."
+        report = "Develop a steady ascendant relationship that inspires cooperation and mutual respect."
     else:
         report = "Names show moderate compatibility impact."
 
