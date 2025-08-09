@@ -16,6 +16,17 @@ CORS(app)
 # Set Swiss Ephemeris path
 swe.set_ephe_path('./ephe')  # Change to your actual ephe folder
 
+
+@app.route("/")
+def home():
+    env_type = "Render" if os.environ.get("RENDER") else "Localhost"
+    return jsonify({
+        "message": "Server is running",
+        "environment": env_type,
+        "url": "https://loveapi.onrender.com" if env_type == "Render" else f"http://{os.getenv('HOST')}:{os.getenv('PORT')}"
+    })
+
+
 # ----------------------
 # 🔤 NAME MATCH ENDPOINT
 # ----------------------
