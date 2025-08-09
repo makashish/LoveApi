@@ -27,19 +27,6 @@ def home():
     })
 
 
-# ----------------------
-# 🔤 NAME MATCH ENDPOINT
-# ----------------------
-@app.route("/name-match", methods=["POST"])
-def name_match():
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "No JSON data received"}), 400
-    if "name1" not in data or "name2" not in data:
-        return jsonify({"error": "Missing 'name1' or 'name2' in JSON"}), 400
-
-    result = name_compatibility(data["name1"], data["name2"])
-    return jsonify(result)
 
 
 # Helper function for compatibility description
@@ -59,6 +46,32 @@ def get_description(name1, name2, compatibility_percent):
     else:
         return f"{name1} and {name2} share a balanced ascendant (Lagna). This connection weaves together understanding, patience, and shared purpose, helping both grow in harmony while respecting each other’s uniqueness."
 
+# ----------------------
+# 🔤 NAME MATCH ENDPOINT
+# ----------------------
+@app.route("/name-match", methods=["POST"])
+def name_match():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON data received"}), 400
+    if "name1" not in data or "name2" not in data:
+        return jsonify({"error": "Missing 'name1' or 'name2' in JSON"}), 400
+
+    # Get the compatibility result
+    result = name_compatibility(data["name1"], data["name2"])
+
+    # Assuming result contains {"compatibility_percent": 75}
+    compatibility_percent = result.get("compatibility_percent", 0)
+
+    # Add a descriptive message
+    description = get_description(data["name1"], data["name2"], compatibility_percent)
+
+    return jsonify({
+        "name1": data["name1"],
+        "name2": data["name2"],
+        "compatibility_percent": compatibility_percent,
+        "description": description
+    })
 
 # ----------------------
 # ♈ RASHI MATCH ENDPOINT
