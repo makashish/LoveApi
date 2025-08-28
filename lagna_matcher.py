@@ -1,4 +1,20 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import os
+from dotenv import load_dotenv
 import swisseph as swe
+import datetime
+
+# Load .env for local development
+load_dotenv()
+
+app = Flask(__name__)
+CORS(app)
+
+# ----------------------
+# Swiss Ephemeris setup
+# ----------------------
+swe.set_ephe_path('./ephe')  # make sure ephe folder exists in your project
 
 def get_lagna(jd, lat, lon):
     houses, ascmc = swe.houses_ex(jd, lat, lon, b'A')
